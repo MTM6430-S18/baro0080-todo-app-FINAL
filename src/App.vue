@@ -3,7 +3,7 @@
 <!--                HEADER      -->
     <header>
         <img src="@/assets/logo.png" alt="vue.js">
-         <h1>Vue Todos</h1>
+         <h1>Vue Todo</h1>
         <p>{{ (new Date()).toDateString() }}</p>
     </header>
 <!--                ADD TASK BUTTON      -->

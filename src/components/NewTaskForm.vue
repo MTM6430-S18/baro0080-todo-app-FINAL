@@ -12,6 +12,7 @@
     <label>
       Category
       <select class="category" v-model.trim="newTask.category">
+        <option value="" name="None">None</option>
         <option value="Homework" name="Homework">Homework</option>
         <option value="Chores" name="Chores">Chores</option>
         <option value="Groceries" name="Groceries">Groceries</option>
@@ -60,7 +61,8 @@ export default {
         title: '',
         dueAt: (new Date()).toISOString().split('T')[0],
         isComplete: false,
-        priority: '!!'
+        priority: '!!',
+        category: ''
       }
     }
   }

@@ -167,7 +167,6 @@ export default {
     grid-template-columns: 0fr 1fr 1fr;
     span {
         padding: 3px;
-        font-weight: bold;
     }
         .edit-button{
             font-size: 12px;

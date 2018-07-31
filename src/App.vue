@@ -1,5 +1,9 @@
 <template>
-  <div id="app">
+<div id="app">
+  <div v-if="isLoggedIn">
+  <div style="display: flex; justify-content: flex-end;">
+      <button type="button" @click="logoutUser" >LOGOUT</button>
+    </div>
 <!--                HEADER      -->
     <header>
         <img src="@/assets/logo.png" alt="vue.js">
@@ -71,6 +75,8 @@
     </transition-group>
     </div>
   </div>
+  <login-form v-else @userDidAuthenticate="loginUser" />
+  </div>
 </template>
 
 <!--                JAVASCRIPT      -->
@@ -78,12 +84,15 @@
 import NewTaskForm from '@/components/NewTaskForm'
 import TaskList from '@/components/TaskList'
 import TaskListItem from '@/components/TaskListItem'
+import LoginForm from '@/components/LoginForm'
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
 import FaSort from '@fortawesome/fontawesome-free-solid/faSort'
+import axios from 'axios'
+import moment from 'moment'
 
 export default {
   name: 'app',
-  components: { NewTaskForm, TaskList, TaskListItem, FontAwesomeIcon },
+  components: { NewTaskForm, TaskList, TaskListItem, FontAwesomeIcon, LoginForm },
   data: () => ({
     newTask: {},
     tasks: [],
@@ -100,7 +109,11 @@ export default {
       {id: 'Work', name: 'Work'}
     ],
     selectedCategory: '',
-    sortAscending: true
+    sortAscending: true,
+    api: {
+      accessToken: '',
+      expiresAt: ''
+    }
   }),
   computed: {
     activeTasks () {
@@ -119,6 +132,15 @@ export default {
     },
     sortIcon () {
       return FaSort
+    },
+    isLoggedIn () {
+      return this.api.accessToken && moment(this.api.expiresAt).isAfter()
+    },
+    axiosOptions () {
+      return {
+        baseURL: 'https://vue-todos.robertmckenney.ca/api',
+        headers: { 'Authorization': `Bearer ${this.api.accessToken}` }
+      }
     }
   },
   watch: {
@@ -129,6 +151,8 @@ export default {
   },
   created () {
     this.tasks = JSON.parse(localStorage.getItem('taskList')) || []
+    this.resetForm()
+    this.loadCachedData()
   },
   methods: {
     addTask (task) {
@@ -148,6 +172,46 @@ export default {
       // eslint-disable-next-line
       let target = this.tasks.find(t => t.id === task.id)
       target = Object.assign(target, task)
+    },
+    resetForm () {
+      this.newTask = {
+        title: '',
+        description: '',
+        dueAt: moment().format(),
+        priority: 2,
+        category: null,
+        isComplete: false
+      }
+    },
+    loadCachedData () {
+      let apiTokens = localStorage.getItem('todoApiTokens')
+      if (apiTokens === undefined) return
+      apiTokens = JSON.parse(apiTokens)
+      this.loginUser(apiTokens)
+    },
+    loginUser (apiTokens) {
+      this.api.accessToken = apiTokens.access_token
+      this.api.expiresAt = apiTokens.expires_at
+      this.saveApiTokens(apiTokens)
+      this.refreshTasks()
+    },
+
+    logoutUser () {
+      this.api.accessToken = ''
+      this.api.expiresAt = ''
+      localStorage.removeItem('todoApiTokens')
+    },
+
+    saveApiTokens (apiTokens) {
+      localStorage.setItem('todoApiTokens', JSON.stringify(apiTokens))
+    },
+
+    refreshTasks () {
+      axios.get('/tasks', this.axiosOptions)
+        .then(({data: {data}}) => {
+          this.taskList = Object.assign({}, ...data.map(t => ({ [t.id]: t })))
+        })
+        .catch(error => this.handleAPIErrors(error))
     }
   }
 }

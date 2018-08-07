@@ -96,6 +96,7 @@ export default {
   data: () => ({
     newTask: {},
     tasks: [],
+    taskList: {},
     priorityOptions: [
       {id: '!!!', name: 'High'},
       {id: '!!', name: 'Medium'},
@@ -143,35 +144,37 @@ export default {
       }
     }
   },
-  watch: {
-    tasks: {
-      handler: function () { this.syncTasks() },
-      deep: true
-    }
-  },
   created () {
-    this.tasks = JSON.parse(localStorage.getItem('taskList')) || []
     this.resetForm()
     this.loadCachedData()
   },
   methods: {
     addTask (task) {
-      this.tasks.push(task)
+      axios.post('/tasks', task, this.axiosOptions)
+        .then(({data: {data: t}}) => {
+          this.tasks.push(task)
+        })
+        .catch(error => this.handleAPIErrors(error))
     },
     deleteTask (task) {
-      const index = this.tasks.findIndex(t => t.id === task.id)
-      this.tasks.splice(index, 1)
-    },
-    syncTasks () {
-      localStorage.setItem('taskList', JSON.stringify(this.tasks))
+      axios.delete(`/todos/${task.id}`, this.axiosOptions)
+        .then(response => {
+          const index = this.tasks.findIndex(t => t.id === task.id)
+          this.tasks.splice(index, 1)
+        })
+        .catch(error => this.handleAPIErrors(error))
     },
     toggleDone (task) {
       task.isComplete = !task.isComplete
     },
     updateTask (task) {
-      // eslint-disable-next-line
+      axios.put(`/todos/${task.id}`, this.axiosOptions)
+        .then(response => {
+          // eslint-disable-next-line
       let target = this.tasks.find(t => t.id === task.id)
-      target = Object.assign(target, task)
+          target = Object.assign(target, task)
+        })
+        .catch(error => this.handleAPIErrors(error))
     },
     resetForm () {
       this.newTask = {
@@ -209,9 +212,14 @@ export default {
     refreshTasks () {
       axios.get('/tasks', this.axiosOptions)
         .then(({data: {data}}) => {
-          this.taskList = Object.assign({}, ...data.map(t => ({ [t.id]: t })))
+          // this.taskList = Object.assign({}, ...data.map(t => ({ [t.id]: t })))
+          this.tasks = data
         })
         .catch(error => this.handleAPIErrors(error))
+    },
+    handleAPIErrors (error) {
+      // We will make this more robust net week
+      console.log(error.message)
     }
   }
 }

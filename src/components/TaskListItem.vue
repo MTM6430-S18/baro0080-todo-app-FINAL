@@ -27,7 +27,7 @@
     </label>
     <label>
       Priority
-      <select class="priority" v-model.trim="editTask.priority" required>
+      <select class="priority" v-model.trim="editTask.priority.name" required>
         <option value="!!!">High</option>
         <option value="!!">Medium</option>
         <option value="!">Low</option>
@@ -41,7 +41,7 @@
 <div v-else class="task-list-item">
         <font-awesome-icon class="font-awesome-icon" :icon="statusIcon" @click="$emit('toggleDone', task)" />
         <div class="list-items">
-        <span>{{ task.priority }}</span>
+        <span>{{ task.priority.name }}</span>
         <span>{{ task.title }}</span>
         <span>{{ task.dueAt }}</span>
         <span class="edit-button" @click="edit">Edit</span>

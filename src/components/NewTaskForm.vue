@@ -1,5 +1,5 @@
 <template>
-  <form class="new-task-form" @submit.prevent="addTask">
+  <form class="new-task-form" @submit.prevent="addTask(newTask)">
     <label>
       Title
       <input v-model.trim="newTask.title" type="text" required>

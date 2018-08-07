@@ -20,7 +20,7 @@
       <input
         type="password"
         id="password"
-        placeholder="email"
+        placeholder="password"
         v-model="password"
         autocomplete="current-password"
         required

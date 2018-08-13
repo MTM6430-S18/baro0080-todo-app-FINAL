@@ -1,15 +1,15 @@
 <template>
 <div id="app">
   <div v-if="isLoggedIn">
-  <div style="display: flex; justify-content: flex-end;">
-      <button type="button" @click="logoutUser" >LOGOUT</button>
-    </div>
 <!--                HEADER      -->
     <header>
         <img src="@/assets/logo.png" alt="vue.js">
          <h1>Vue Todo</h1>
         <p>{{ (new Date()).toDateString() }}</p>
     </header>
+    <div style="display: flex; justify-content: flex-end;">
+      <button type="button" class="logout" @click="logoutUser" >LOGOUT</button>
+    </div>
 <!--                ADD TASK BUTTON      -->
     <div>
       <router-link class="add-task" to="/add">Add Task</router-link>
@@ -385,5 +385,15 @@ p{
 .overdue{
   color: red;
   font-weight: bold;
+}
+.logout{
+  background-color: #2c3e50;
+  font-weight: bold;
+  color: white;
+  padding: 5px 8px 5px 8px;
+  border-radius: 5px;
+  &:hover{
+    cursor: pointer;
+  }
 }
 </style>

@@ -114,7 +114,6 @@ display: block;
         grid-template-columns: 1fr 1fr;
     }
 }
-
 .button {
     margin: 10px;
     height: 25px;

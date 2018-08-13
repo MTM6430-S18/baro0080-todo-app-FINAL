@@ -12,7 +12,7 @@
     </label>
     <label>
       Category
-      <select class="category" v-model.trim="editTask.category">
+      <select class="category" v-model.trim="editTask.category.name">
         <option value="" name="None">None</option>
         <option value="Homework" name="Homework">Homework</option>
         <option value="Chores" name="Chores">Chores</option>

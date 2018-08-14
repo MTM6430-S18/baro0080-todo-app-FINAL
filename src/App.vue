@@ -98,15 +98,15 @@ export default {
     tasks: [],
     taskList: {},
     priorityOptions: [
-      {id: 3, name: 'high'},
-      {id: 2, name: 'medium'},
-      {id: 1, name: 'low'}
+      {id: 3, name: 'High'},
+      {id: 2, name: 'Medium'},
+      {id: 1, name: 'Low'}
     ],
     selectedPriority: '',
     categoryOptions: [
-      {id: 1, name: 'home'},
-      {id: 2, name: 'school'},
-      {id: 3, name: 'work'}
+      {id: 1, name: 'Home'},
+      {id: 2, name: 'School'},
+      {id: 3, name: 'Work'}
     ],
     selectedCategory: '',
     sortAscending: true,

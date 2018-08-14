@@ -167,15 +167,17 @@ export default {
       task.isComplete = !task.isComplete
       axios.put(`/todos/${task.id}`, task, this.axiosOptions)
         .then(response => {
-          task
+          return task
         })
         .catch(error => this.handleAPIErrors(error))
     },
     updateTask (task) {
       axios.put(`/tasks/${task.id}`, task, this.axiosOptions)
         .then(response => {
+          // eslint-disable-next-line
           let target = this.tasks.find(t => t.id === task.id)
           target = Object.assign({}, target, task)
+          this.refreshTasks()
         })
         .catch(error => this.handleAPIErrors(error))
     },
@@ -303,15 +305,15 @@ margin: 0 auto;}
   grid-template-columns: 2fr 5px 2fr;
   a {
     font-weight: bold;
-    color: white;
-    background-color: #42B783;
+    background-color: #F7FDFF;
+    color: #42B783;
+    border-bottom: 1px solid #42B783;
     padding: 3px;
     border-radius: 5px;
     &.router-link-exact-active {
       text-decoration: none;
-      background-color: #F7FDFF;
-      color: #42B783;
-      border-bottom: 1px solid #42B783;
+      color: white;
+      background-color: #42B783;
     }
   }
 }

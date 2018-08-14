@@ -17,10 +17,6 @@ export default {
   components: { TaskListItem },
   props: ['tasks', 'selectedPriority', 'selectedCategory', 'sortAscending'],
   computed: {
-    // tasksSortByDue () {
-    //   let sortedTasks = [ ...this.filteredTasks ]
-    //   return sortedTasks.sort((a, b) => new Date(a.dueAt) - new Date(b.dueAt))
-    // },
     filteredPriorityTasks () {
       return (!this.selectedPriority)
         ? this.tasks

@@ -12,25 +12,24 @@
     </label>
     <label>
       Category
-      <select class="category" v-model.trim="editTask.category.name">
-        <option value="" name="None">None</option>
-        <option value="Homework" name="Homework">Homework</option>
-        <option value="Chores" name="Chores">Chores</option>
-        <option value="Groceries" name="Groceries">Groceries</option>
-        <option value="Work" name="Work">Work</option>
+      <select class="category" v-model.trim="editTask.category.id">
+        <option value="null" name="None">None</option>
+        <option value="1" name="home">Home</option>
+        <option value="2" name="school">School</option>
+        <option value="3" name="work">Work</option>
       </select>
     </label>
     <div class="grid-form">
     <label>
       Due At
-      <input class="dueDate" v-model="editTask.dueAt" type="date" required>
+    <input class="dueDate" v-model="editTask.dueAt.split(' ')[0]" type="date" required>
     </label>
     <label>
       Priority
-      <select class="priority" v-model.trim="editTask.priority.name" required>
-        <option value="!!!">High</option>
-        <option value="!!">Medium</option>
-        <option value="!">Low</option>
+      <select class="priority" v-model.trim="editTask.priority.id" required>
+        <option value="3" name="high">High</option>
+        <option value="2" name="medium">Medium</option>
+        <option value="1" name="low">Low</option>
       </select>
     </label>
     </div>
@@ -41,12 +40,12 @@
 <div v-else class="task-list-item">
         <font-awesome-icon class="font-awesome-icon" :icon="statusIcon" @click="$emit('toggleDone', task)" />
         <div class="list-items">
-        <span>{{ task.priority.name }}</span>
+        <span>{{ task.priority | prioritySymbol }}</span>
         <span>{{ task.title }}</span>
-        <span>{{ task.dueAt }}</span>
+        <span>{{new Date(task.dueAt).toISOString().split('T')[0]}}</span>
         <span class="edit-button" @click="edit">Edit</span>
         <span class="description">{{ task.description }}</span>
-        <span>{{ task.category }}</span>
+        <span>{{ task.category ? task.category.name.toUpperCase() : '' }}</span>
         </div>
         <font-awesome-icon class="font-awesome-icon" :icon="deleteIcon" @click="$emit('deleteTask', task)" />
     </div>
@@ -91,6 +90,11 @@ export default {
     save () {
       this.$emit('updateTask', this.editTask)
       this.isEditing = false
+    }
+  },
+  filters: {
+    prioritySymbol (priority) {
+      return '!'.repeat(priority.order)
     }
   }
 }

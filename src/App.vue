@@ -26,7 +26,7 @@
     <div id="filtering" class="tabs">
       <button @click="sortAscending = !sortAscending"><font-awesome-icon :icon="sortIcon" /> Due Date</button>
       <select name="priority-filter" id="priority-filter" v-model="selectedPriority">
-      <option value="">Priority</option>
+        <option value="">Priority</option>
         <option v-for="option in priorityOptions" :value="option.id" :key="option.id">{{ option.name}}</option>
       </select>
       <select name="category-filter" id="category-filter" v-model="selectedCategory">
@@ -98,16 +98,15 @@ export default {
     tasks: [],
     taskList: {},
     priorityOptions: [
-      {id: '!!!', name: 'High'},
-      {id: '!!', name: 'Medium'},
-      {id: '!', name: 'Low'}
+      {id: 3, name: 'high'},
+      {id: 2, name: 'medium'},
+      {id: 1, name: 'low'}
     ],
     selectedPriority: '',
     categoryOptions: [
-      {id: 'Homework', name: 'Homework'},
-      {id: 'Chores', name: 'Chores'},
-      {id: 'Groceries', name: 'Groceries'},
-      {id: 'Work', name: 'Work'}
+      {id: 1, name: 'home'},
+      {id: 2, name: 'school'},
+      {id: 3, name: 'work'}
     ],
     selectedCategory: '',
     sortAscending: true,
@@ -150,9 +149,9 @@ export default {
   },
   methods: {
     addTask (task) {
-      axios.post('/tasks', task, this.axiosOptions)
+      axios.post('/todos', task, this.axiosOptions)
         .then(({data: {data: t}}) => {
-          this.tasks.push(task)
+          this.tasks.push(t)
         })
         .catch(error => this.handleAPIErrors(error))
     },
@@ -166,13 +165,17 @@ export default {
     },
     toggleDone (task) {
       task.isComplete = !task.isComplete
+      axios.put(`/todos/${task.id}`, task, this.axiosOptions)
+        .then(response => {
+          task
+        })
+        .catch(error => this.handleAPIErrors(error))
     },
     updateTask (task) {
-      axios.put(`/todos/${task.id}`, this.axiosOptions)
+      axios.put(`/tasks/${task.id}`, task, this.axiosOptions)
         .then(response => {
-          // eslint-disable-next-line
-      let target = this.tasks.find(t => t.id === task.id)
-          target = Object.assign(target, task)
+          let target = this.tasks.find(t => t.id === task.id)
+          target = Object.assign({}, target, task)
         })
         .catch(error => this.handleAPIErrors(error))
     },

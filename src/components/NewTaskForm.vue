@@ -12,11 +12,10 @@
     <label>
       Category
       <select class="category" v-model.trim="newTask.category">
-        <option value="" name="None">None</option>
-        <option value="Homework" name="Homework">Homework</option>
-        <option value="Chores" name="Chores">Chores</option>
-        <option value="Groceries" name="Groceries">Groceries</option>
-        <option value="Work" name="Work">Work</option>
+        <option value="null" name="None">None</option>
+        <option value="1" name="Home">Home</option>
+        <option value="2" name="School">School</option>
+        <option value="3" name="Work">Work</option>
       </select>
     </label>
     <div class="grid-form">
@@ -27,9 +26,9 @@
     <label>
       Priority
       <select class="priority" v-model.trim="newTask.priority" required>
-        <option value="!!!">High</option>
-        <option value="!!">Medium</option>
-        <option value="!">Low</option>
+        <option value="3" name="High">High</option>
+        <option value="2" name="Medium">Medium</option>
+        <option value="1" name="Low">Low</option>
       </select>
     </label>
     </div>
@@ -61,7 +60,7 @@ export default {
         title: '',
         dueAt: (new Date()).toISOString().split('T')[0],
         isComplete: false,
-        priority: '!!',
+        priority: '2',
         category: ''
       }
     }

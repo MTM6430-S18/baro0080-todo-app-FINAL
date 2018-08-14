@@ -17,20 +17,20 @@ export default {
   components: { TaskListItem },
   props: ['tasks', 'selectedPriority', 'selectedCategory', 'sortAscending'],
   computed: {
-    tasksSortByDue () {
-      let sortedTasks = [ ...this.filteredTasks ]
-      return sortedTasks.sort((a, b) => new Date(a.dueAt) - new Date(b.dueAt))
-    },
+    // tasksSortByDue () {
+    //   let sortedTasks = [ ...this.filteredTasks ]
+    //   return sortedTasks.sort((a, b) => new Date(a.dueAt) - new Date(b.dueAt))
+    // },
     filteredPriorityTasks () {
       return (!this.selectedPriority)
         ? this.tasks
-        : this.tasks.filter(task => task.priority === this.selectedPriority)
+        : this.tasks.filter(task => task.priority.id === this.selectedPriority)
     },
     filteredCategoryTasks () {
       console.log(this.selectedCategory)
-      return (this.selectedCategory === '')
+      return (!this.selectedCategory)
         ? this.tasks
-        : this.tasks.filter(task => task.category === this.selectedCategory)
+        : this.tasks.filter(task => task.category && task.category.id === this.selectedCategory)
     },
     filteredTasks () {
       const combined = [
@@ -38,9 +38,11 @@ export default {
         ...this.filteredPriorityTasks
       ]
       return combined.reduce((accumulator, task) => {
-        if (this.filteredPriorityTasks.includes(task) &&
-        this.filteredCategoryTasks.includes(task) &&
-        !accumulator.includes(task)) {
+        if (
+          this.filteredPriorityTasks.includes(task) &&
+          this.filteredCategoryTasks.includes(task) &&
+          !accumulator.includes(task)
+        ) {
           accumulator.push(task)
         }
         return accumulator
